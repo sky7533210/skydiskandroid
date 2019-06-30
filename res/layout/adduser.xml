@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00a0e9"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_sytle"
+            android:src="@drawable/head"
+             />
+
+        <RelativeLayout
+            android:id="@+id/login_grid"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_below="@+id/head"
+            android:layout_alignParentBottom="true"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/uName_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:src="@drawable/user" />
+
+                <EditText
+                    android:id="@+id/reg_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_toEndOf="@+id/uName_icon"
+                    android:layout_toRightOf="@+id/uName_icon"
+                    android:background="@drawable/translucent"
+                    android:hint="注册手机号" />
+
+                <ImageView
+                    android:id="@+id/password_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/uName_icon"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/pass" />
+
+                <EditText
+                    android:id="@+id/reg_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignRight="@+id/reg_user"
+                    android:layout_below="@+id/reg_user"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_toEndOf="@+id/password_icon"
+                    android:layout_toRightOf="@+id/password_icon"
+                    android:background="@drawable/translucent"
+                    android:hint="输入密码"
+                    android:inputType="textPassword" />
+
+                <ImageView
+                    android:id="@+id/password_icon2"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/password_icon"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="40dp"
+                    android:src="@drawable/pass" />
+
+                <EditText
+                    android:id="@+id/reg_password2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignRight="@+id/reg_password"
+                    android:layout_below="@+id/reg_password"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_toEndOf="@+id/password_icon2"
+                    android:layout_toRightOf="@+id/password_icon2"
+                    android:background="@drawable/translucent"
+                    android:hint="确认密码"
+                    android:inputType="textPassword" />
+
+                <Button
+                    android:id="@+id/reg_miss_pas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/password_icon2"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="50dp"
+                    android:background="#00a0e9"
+                    android:text="获取验证码"
+                    android:textColor="@android:color/white"
+                    android:textSize="19sp" />
+
+                <EditText
+                    android:id="@+id/reg_code"
+                    android:layout_width="182dp"
+                    android:layout_height="45dp"
+                    android:layout_below="@+id/password_icon2"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginLeft="29dp"
+                    android:layout_marginTop="49dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_toEndOf="@+id/reg_miss_pas"
+                    android:layout_toRightOf="@+id/reg_miss_pas"
+                    android:background="@drawable/translucent"
+                    android:hint="验证码"
+                    android:textSize="19sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_weight="0.3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp">
+
+        <ImageButton
+            android:id="@+id/reg_ok"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/btn_sytle"
+            android:src="@drawable/add"/>
+    </RelativeLayout>
+</LinearLayout>

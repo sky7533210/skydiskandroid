@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sky云盘</string>
+    <string name="login">用户登录</string>
+    <string name="tv_username">手机:</string>
+    <string name="tv_password">密码:</string>
+    <string name="bt_log">登录</string>
+    <string name="bt_bos">取消</string>
+    <string name="et_username">输入手机号</string>
+    <string name="et_password">输入密码</string>
+    <string name="can_not_open_file">无法打开，请安装相应的软件！</string>
+    <string name="not_file">对不起，这不是文件！</string>
+</resources>
