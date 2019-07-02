@@ -17,6 +17,7 @@ import com.sky.disk.retrofit.Api;
 import com.sky.disk.retrofit.Http;
 import com.sky.disk.util.Download;
 import com.sky.disk.util.OpenFiles;
+import com.sky.disk.util.Upload;
 
 import android.R.integer;
 import android.app.Activity;
@@ -64,6 +65,8 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 	private FileBean currentDownloadFileBean;
 
 	private File file;
+
+	private Upload upload;
 
 	public FileAdapter(MainActivity mainActivity) {
 		Retrofit retrofit = Http.getRetrofit(null);
@@ -243,7 +246,9 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 				boolean issuccess = file1.mkdir();
 				Log.i("fileadapter", issuccess + "");
 			}
-
+			
+			mainActivity.showDownloadFile(fileBean);
+			
 			String _id = Base64.encodeToString(String.valueOf(fileBean.getId()).getBytes(), Base64.DEFAULT);
 			Call<ResponseBody> call = api.download1(_id);
 			call.enqueue(new Callback<ResponseBody>() {
@@ -262,12 +267,6 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 							file2.createNewFile();
 						fos = new FileOutputStream(file2);
 
-						Log.i("show", "show");
-						Message msg=Message.obtain(handler);
-						msg.what=0;
-						msg.obj=fileBean;
-						msg.sendToTarget();				
-						
 						currentDownloadFileBean=fileBean;
 						
 						download= new Download(is, fos, new Download.ProgressCallBack() {
@@ -314,7 +313,47 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 		}
 
 	}
-
+	
+	public void upload(String filePath) {
+		
+		File f=new File(filePath);
+		if(!f.exists()) {
+			Toast.makeText(mainActivity, "文件不存在"+filePath, Toast.LENGTH_LONG).show();
+			return;
+		}
+		Log.i("fileadapter", "准备上传");
+		
+		final FileBean fileBean=new FileBean();
+		fileBean.setName(f.getName());
+		fileBean.setSize((int) f.length());
+		
+		int index=filePath.lastIndexOf('.');
+		fileBean.setType("");
+		if(index>-1)
+			fileBean.setType(filePath.substring(index, filePath.length()));
+		
+		mainActivity.showUploadFile(fileBean);
+		upload=new Upload(f,new Upload.Callback() {
+			
+			@Override
+			public void onProgress(int size) {
+				Message msg=Message.obtain(handler);
+				msg.what=3;
+				msg.arg1=size;
+				msg.sendToTarget();	
+			}
+			
+			@Override
+			public void onFinish() {
+				Message msg=Message.obtain(handler);
+				msg.what=4;
+				msg.arg1=fileBean.getSize();
+				msg.sendToTarget();	
+			}
+		});
+		upload.start();
+	}
+	
 	// 下拉刷新listview
 	public void refresh() {
 		list(currentParentId);
@@ -328,9 +367,9 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btn_download:
-			Button btn=(Button) v;				
+		Button btn=(Button) v;
+		switch (v.getId()) {		
+		case R.id.btn_download:							
 			switch (btn.getText().toString()) {
 			case "暂停":
 				if(download!=null) {
@@ -351,6 +390,25 @@ public class FileAdapter implements OnClickListener,OnItemClickListener, OnItemL
 				}
 				break;			
 			}			
+			break;
+		case R.id.btn_select:
+			mainActivity.openFileManager();
+			break;
+		case R.id.btn_upload:
+			switch (btn.getText().toString()) {
+			case "暂停":
+				if(upload!=null) {
+					upload.pause();
+					btn.setText("继续");
+				}
+				break;
+			case "继续":
+				if(upload!=null) {
+					upload.goOn();
+					btn.setText("暂停");
+				}
+				break;
+			}
 			break;
 		}		
 	}

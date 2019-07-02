@@ -1,8 +1,11 @@
 package com.sky.disk.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -12,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
@@ -22,7 +25,7 @@ import com.sky.disk.adapter.FileAdapter;
 import com.sky.disk.adapter.FileListAdapter;
 import com.sky.disk.application.ExitApplication;
 import com.sky.disk.bean.FileBean;
-
+import com.sky.disk.util.FileChooseUtil;
 import com.sky.disk.view.MyListView;
 import com.sky.disk.view.PopupWindowImage;
 import com.sky.disk.view.PopupWindowTrans;
@@ -149,14 +152,22 @@ public class MainActivity extends Activity implements MyListView.LoadListener{
 
 
 
-	private void showDownloadFile(FileBean fileBean) {
-		popupWindowTrans.setImgAndName(fileBean);
+	public void showDownloadFile(FileBean fileBean) {
+		popupWindowTrans.setImgAndNameDown(fileBean);
 		popupWindowTrans.show();
 	}
 	private void updateDownloadProgress(int size,boolean isFinish) {
-		popupWindowTrans.updateProgress(size, isFinish);
+		popupWindowTrans.updateProgressDown(size, isFinish);
 	}
-
+	
+	public void showUploadFile(FileBean fileBean) {
+		popupWindowTrans.setImgAndNameUp(fileBean);
+		popupWindowTrans.show();
+	}
+	private void updateUploadProgress(int size,boolean isFinish) {
+		popupWindowTrans.updateProgressUp(size, isFinish);
+	}
+	
 	public Handler getHandler() {
 		return handler;
 	}
@@ -164,10 +175,7 @@ public class MainActivity extends Activity implements MyListView.LoadListener{
 	private Handler handler=new Handler(new Handler.Callback() {
 		@Override
 		public boolean handleMessage(Message msg) {
-			switch (msg.what) {
-			case 0:
-				showDownloadFile((FileBean) msg.obj);
-				break;
+			switch (msg.what) {			
 			case 1:
 				updateDownloadProgress(msg.arg1, false);
 				break;
@@ -175,9 +183,50 @@ public class MainActivity extends Activity implements MyListView.LoadListener{
 				Toast.makeText(MainActivity.this, "下载完成", Toast.LENGTH_LONG).show();
 				updateDownloadProgress(msg.arg1, true);
 				break;
+			case 3:
+				updateUploadProgress(msg.arg1, false);
+				break;
+			case 4:
+				Toast.makeText(MainActivity.this, "上传完成", Toast.LENGTH_LONG).show();
+				updateUploadProgress(msg.arg1, true);
+				break;
 				
 			}
 			return false;
 		}
 	});
+
+
+	public void openFileManager() {
+		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            Toast.makeText(this, "没有外部存储", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+		File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/skydiskdownload");
+     
+        //调用系统文件管理器打开指定路径目录
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setDataAndType(Uri.fromFile(file.getParentFile()), "*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 0);
+	}
+
+@Override
+protected void onActivityResult(int requestCode,int resultCode,Intent data){//选择文件返回
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode==RESULT_OK){
+        switch(requestCode){
+              case 0:
+              Uri uri=data.getData();
+              String chooseFilePath=FileChooseUtil.getInstance(this).getChooseFileResultPath(uri);
+              
+              fileAdapter.upload(chooseFilePath);
+              
+              Log.d("11111111","选择文件返回："+chooseFilePath);
+              Toast.makeText(this, chooseFilePath, Toast.LENGTH_LONG).show();
+              break;
+        }
+    }
+}
 }
